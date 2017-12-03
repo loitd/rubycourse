@@ -1,0 +1,31 @@
+-----------------------------------------------------------------------------------------
+| Hướng dẫn cho bài 00: ĐỂ HIỂU CÁC KHÁI NIỆM CƠ BẢN VỀ LẬP TRÌNH HƯỚNG ĐỐI TƯỢNG (OOP) 
+| Thực hiện bởi: Trần Đức Lợi (loitranduc@gmail.com)
+| Tại: Kênh Youtube Trần Đức Lợi
+-----------------------------------------------------------------------------------------
+1. Khái niệm Class vs Object
+	- Tôi xây nhà, bản vẽ căn nhà là Class, là khuôn mẫu, căn nhà thực của tôi là Object, là thực thể. Bản vẽ này có thể được dùng cho nhiều căn nhà khác. Các căn nhà khác nhau là các Object khác nhau.
+	- Mỗi đối tượng có các thuộc tính và các phương thức (properties & methods)
+	- Thuộc tính: dữ liệu mô tả về đối tượng. Ví dụ căn nhà của tôi ở trên có thuộc tính màu sơn là trắng
+	- Phương thức: để thực hiện hành vi của đối tượng. Ví dụ đối tượng là con chó thì có phương thức cắn(), chạy(), nhảy(), bơi()
+	- Về mặt lập trình: Các hàm (function) trong Lớp (Class) được gọi là các Phương thức (method), các biến trong lớp được gọi là các thuộc tính
+2. Tính kế thừa
+	- Người Việt Nam là một loại của lớp người -> ta có thể tạo lớp người Việt Nam từ lớp người nói chung -> khi này lớp Người Việt nam là lớp con được kế thừa các thuộc tính từ lớp Người
+	- Lớp Người Việt Nam có đầy đủ các thuộc tính của lớp Người bình thường và có thể thêm các thuộc tính riêng của mình. Ví dụ: quốc tịch = Việt Nam, Màu da = Vàng, ...
+	- Cũng như vậy với ví dụ lớp Chó, lớp Mèo kế thừa từ lớp động vật nói chung
+	- Bàn đến các mức truy cập: public, protected, private
+		- Thành viên trong cùng một lớp được truy cập cả 3 loại dữ liệu
+		- Thành viên của lớp con (lớp dẫn xuất): được truy cập public và protected
+		- Các loại khác chỉ được truy cập đến public
+3. Tính đóng gói - Encapsulation
+	- Che dấu hoạt động bên trong của dữ liệu và chỉ lộ ra các giao diện cho người dùng.
+	- Tôi điều khiển xe oto thông qua giao diện là hộp số, tay lái. Còn lại tôi đánh lái thì oto phải quay trục nào, vào số thì oto phải làm gì tôi không biết. 
+	- Tất cả những gì tôi làm, giao tiếp là với giao diện (bảng điều khiển, hộp số, tay lái)
+4. Tính đa kế thừa & đơn kế thừa
+	- Đơn kế thừa: chỉ cho phép kế thừa từ một lớp duy nhất (mỗi con chỉ có một cha) với các ngôn ngữ tiêu biểu: Java, C#
+	- Đa kế thừa: được kế thừa từ nhiều lớp. Ngôn ngữ: C++, Python
+5. Tính đa hình
+	- Lấy ví dụ về lớp động vật, lớp chó và lớp mèo ở trên. Lớp động vật có phương thức kêu() nhưng chắc chắn cách kêu ở chó và ở mèo là khác nhau. Vậy ta cùng gọi là phương thức kêu() nhưng cách thực thi của phương thức này ở lớp Mèo và lớp Chó lại khác nhau và đây là tính đa hình
+6. Tính trừu tượng hóa (Abstraction)
+	- Ta có thể định nghĩa ra một lớp abstract với các thuộc tính, phương thức chung nhưng chỉ cho phép thừa kế chứ không cho phép implement
+	- Sử dụng trong ví dụ với lớp động vật -> ta sẽ coi lớp động vật là lớp trừu tượng để cho các lớp chó, mèo kế thừa và implement chứ không cho phép sinh ra một đối tượng chỉ là động vật

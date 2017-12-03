@@ -1,0 +1,19 @@
+<!-- Nav bar lấy từ Bootstrap và được chỉnh lại bởi Loitd -->
+<div class="container">
+  <div class="header clearfix">
+    <nav>
+      <ul class="nav nav-pills pull-right" style="margin: 10px;">
+        <!-- Thêm đường dẫn đến trang chủ -->
+        <li role="presentation" class="active"><%= link_to 'Home', users_path %></li>
+        <li role="presentation"><a href="#">About</a></li>
+        <li role="presentation"><a href="#">Contact</a></li>
+        <%= fillnav %>
+      </ul>
+    </nav>
+    <!-- <h3 class="text-muted">Học lập trình Ruby căn bản</h3> -->
+    <h3 class="text-muted">
+      <%= link_to raw('<span class="glyphicon glyphicon-knight" aria-hidden="true"></span> Trần Đức Lợi'), users_path %>
+      <!-- <a href="#" style=""><span class="glyphicon glyphicon-knight" aria-hidden="true"></span> Trần Đức Lợi</a> -->
+    </h3>
+  </div>
+</div> <!-- /container -->

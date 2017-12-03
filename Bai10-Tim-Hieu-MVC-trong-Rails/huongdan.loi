@@ -1,0 +1,72 @@
+# -----------------------------------------------------------------------------------------
+# | Hướng dẫn cho bài: Form validation và luồng xử lý trong Ruby on Rails
+# | Thực hiện bởi: Trần Đức Lợi (loitranduc@gmail.com)
+# | Tại: Playlist Youtube "Học lập trình Ruby căn bản"
+# | Tham gia nhóm "Học lập trình cùng Trần Đức Lợi" trên facebook: 
+# | https://www.facebook.com/groups/hoclaptrinhleotran/
+# -----------------------------------------------------------------------------------------
+
+1. Phân tích luồng xử lý yêu cầu của ứng dụng trong bài 09: Tìm hiểu và tạo ứng dụng đầu tiên với Rails (RoR)
+
+					 			  (Điều phối)			(Trả về @users)
+user (browser) ----> router ----> controllers <--------> models <----------> db 
+									|	|						 (Lưu trữ & truy xuất DL)
+			<------------------------	|
+					HTML				|
+										views
+										(Nhận @users từ Controller)
+										(Trả về HTML)
+
+2. MVC là gì?
+Là mô hình bố trí code thành các phần khác nhau thực hiện các nhiệm vụ khác nhau bao gồm có:
+- Model: Mọi thứ làm việc với db, nghiệp vụ logic
+- View: Mọi thứ để hiển thị thông tin cho người dùng
+- Controller: Điều phối các luồng hoạt động, nhận và trả kết quả
+Ngoài ra thông thường sẽ có thêm Routes làm nhiệm vụ định tuyến
+-> đảm bảo các dự án lớn vận hành tốt
+
+Trong Ruby on Rails, các model có cấu trúc kế thừa như sau:
+Models: User < ApplicationRecord < ActiveRecord::Base
+Controllers: UsersController < ApplicationController < ActionController::Base
+
+3. Các loại request đã yêu cầu trong bảng định tuyến
+HTTP request	URL				Action		Purpose
+GET				/users			index		Trang liệt kê tất cả các users
+GET				/users/1		show		Xem user với id 1
+GET				/users/new		new			Page để tạo user mới
+POST			/users			create		Tạo user mới
+GET				/users/1/edit	edit		page để chỉnh sửa user với id 1
+PATCH			/users/1		update		Cập nhật user với id 1
+DELETE			/users/1		destroy		Xóa user với id 1
+
+4. Thêm các phần validate dữ liệu vào ứng dụng (thêm vào models)
+	- Giới hạn độ dài				: length: { maximum: 10 } hoặc { minimum: 2 } hoặc { in: 2..10 } hoặc { is: 6 }
+	- Bắt buộc phải có				: presence: true
+	- Trường duy nhất				: uniqueness: {case_sensitive: false} #(không phân biệt hoa thường)
+	- Trường duy nhất				: uniqueness: true #(phân biệt hoa thường)
+	- Dấu tick đã được tick chưa	: acceptance: true hoặc acceptance: { message: 'Ban phai tick dong y' }
+	- Bắt phải nhập trường confirm	: confirmation: true # thường cho password hoặc email
+	- Định dạng chuỗi nhập vào		: format: { with: /\A[a-zA-Z]+\z/, message: "only allows letters" }
+	- Tự validate theo nhu cầu		: Tự định nghĩa một hàm để thực hiện validate
+5. Tự validate
+	def loitd_valid
+	    if name.present? && name != "loi"
+	      errors.add(:name, "Ten khong hop le")
+	    end
+	end
+
+	validate :loitd_valid, loitd_valid2
+6. Chỉnh lại giao diện sẵn có
+	- Chỉnh sửa file view
+	
+
+
+
+
+
+
+
+
+
+
+

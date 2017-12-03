@@ -1,0 +1,26 @@
+. giới thiệu về starter template
+	. Ví dụ với Bootstrap cho HTML Web 
+. giới thiệu silverspoon của tác giả sachin
+	. Link: https://github.com/sachin/silverspoon
+	. Devise for authentication
+	. Active Admin for admin interface
+	...
+	. ý kiến về việc sử dụng starter template (của riêng tôi vs của tác giả sachin)
+. chuẩn bị
+	. xampp (để cài mysql và admin trên windows)
+	. rails 5.0
+	. heidisql để test connect vào mysql (tùy chọn)
+	. git
+. hướng dẫn sử dụng
+	. git clone https://github.com/sachin/silverspoon.git
+	. chỉnh sửa file gem để tránh lỗi SSL
+	. bundle install
+	. tạo user mới spoon và grant hết quyền trên db spoon. 
+		. GRANT ALL PRIVILEGES ON spoon.* to 'spoon'@'localhost' identified by '123456';
+		. Kiểm tra với HeidiSQL
+	. cấu hình db mới vào app trong file database.yml (user, password, database cho cả 3 môi trường test, dev,prod)
+	. rails db:create db:migrate db:seed (bỏ qua Vào site sẽ thấy lỗi ActiveRecord::PendingMigrationError)
+	. rails s 
+. sử dụng thử
+	. vào url để kiểm tra: http://localhost:3000/users/sign_in
+	. đăng ký, confirm, login, logout

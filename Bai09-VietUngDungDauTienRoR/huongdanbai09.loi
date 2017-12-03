@@ -1,0 +1,38 @@
+-----------------------------------------------------------------------------------------
+| Hướng dẫn cho bài: TÌM HIỂU VÀ TẠO ỨNG DỤNG ĐẦU TIÊN VỚI RAILS (ROR)
+| Thực hiện bởi: Trần Đức Lợi (loitranduc@gmail.com)
+| Tại: Playlist Youtube "Học lập trình Ruby căn bản"
+-----------------------------------------------------------------------------------------
+0. Đã lập trình Python?
+	- Rails <> Django
+	- Sinatra <> Flask
+1. Tạo một ứng dụng test
+	- rails new app2
+	- Chỉnh sửa gemfile nếu gặp lỗi ssl
+	- cd app2\bin
+	- rails server
+	- rails s -p 1010 -b ip_addr
+	- thay đổi port mặc định bằng chỉnh sửa file puma.rb
+2. Thay trang mặc định
+	- def hàm index trong application controller với nội dung: render html: "hello, world!"
+	- thêm vào routes nội dung: root 'application#index'
+	- luôn có một controller là application
+3. Thêm một trang mới & các lệnh cơ bản
+	- rails g controller Loitd index (g = generate)
+	- rails g controller news index create
+	- rails g scaffold User name:string email:string #scaffolding is a quick way to generate some of the major pieces of apps
+	- rails routes #để kiểm tra ds routes
+	- rails d controller loitd (d = destroy)
+	- rails d model loitd
+4. Làm một trang web tạo người dùng đơn giản
+	- User
+		- id
+		- name
+		- email
+	- chạy scaffold cho user 
+	- migrate db: rails db:migrate
+	- hiểu về rake trong ruby
+		- https://github.com/ruby/rake
+		- rake trong Ruby <> make trong Unix
+		- rails db:migrate -> bundle exec rake db:migrate
+		- được thêm sẵn chính thức từ bản Rails 5

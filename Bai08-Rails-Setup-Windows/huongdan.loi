@@ -1,0 +1,37 @@
+Hướng dẫn cho bài 08: CÀI ĐẶT RUBY ON RAILS TRÊN WINDOWS
+Thực hiện bởi: Trần Đức Lợi (loitranduc@gmail.com)
+Tại: Playlist Youtube "Học lập trình Ruby căn bản"
+---------------------------------------------------
+0. Cách nhanh gọn nhẹ
+	- http://railsinstaller.org/en
+1. Cài đặt Ruby trên Windows
+	- http://rubyinstaller.org/downloads/
+	- ruby -v
+	- version 2.2.2 hoặc mới hơn
+2. Cài đặt SQLite3
+	- https://www.sqlite.org/
+	- sqlite3 --version
+3. Cài đặt Rails
+	- gem --version
+	- gem install rails
+	- rails --version
+4. Chữa lỗi 
+	SSL_connect returned=1 errno=0 state=SSLv3 read server certificate B: certificate verify failed
+	- https://gist.github.com/luislavena/f064211759ee0f806c88
+	- Download: https://github.com/rubygems/rubygems/releases/download/v2.2.3/rubygems-update-2.2.3.gem
+	- gem install --local C:\rubygems-update-2.2.3.gem
+	- update_rubygems --no-ri --no-rdoc
+	- gem uninstall rubygems-update -x
+
+	Thay source
+	- gem sources -r https://rubygems.org/
+	- gem sources -a http://rubygems.org/
+
+	Sử dụng DevKit
+	- https://github.com/oneclick/rubyinstaller/wiki/Development-Kit
+	- ruby dk.rb init
+	- ruby dk.rb install
+	
+4. Tham khảo
+	- http://guides.rubyonrails.org/getting_started.html
+	- http://guides.rubyonrails.org/images/getting_started/rails_welcome.png

@@ -1,0 +1,28 @@
+# -----------------------------------------------------------------------------------------
+# | Hướng dẫn cho bài: Sử dụng Bootstrap 3 trong Ruby on Rails 5
+# | Thực hiện bởi: Trần Đức Lợi (loitranduc@gmail.com)
+# | Tại: Playlist Youtube "Học lập trình Ruby căn bản"
+# | Tham gia nhóm "Học lập trình cùng Trần Đức Lợi" trên facebook: 
+# | https://www.facebook.com/groups/hoclaptrinhleotran/
+# -----------------------------------------------------------------------------------------
+
+. Cài đặt Bootstrap-sass cho Rails
+	- Sau khi cài xong, Rails sinh ra các file css riêng cho từng controller
+	- Tạo thêm 1 file common.scss dùng chung và import bootstrap và bootstrap-sprockets
+. Thêm thư viện bootstrap js vào Rails
+	- Các thư viện được thêm vào tại file application.js trong assets
+. Chỉnh sửa title mặc định của các trang 
+	- Vai trò của application_helper và application.html.erb
+	- Thêm def trong application_helper để chỉnh sửa title của trang
+		- def maketitle
+	- Thêm title trong template chính application.html
+. Thêm main nav và ảnh vào trong file views
+	- Thêm file _nav.html.erb trong foler layouts
+	- thêm nav vào template chính bằng lệnh render
+	- thêm ảnh logo vào assets
+	- thêm code vào file _nav.html.erb
+. Chỉnh sửa file index.html.erb của giao diện users
+	- thêm các class vào table
+	- Chỉnh sửa decor của các button
+. Sử dụng Glyphicons để thêm icon trong Rails
+	- thêm icon vào logo

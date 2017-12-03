@@ -1,0 +1,38 @@
+# -----------------------------------------------------------------------------------------
+# | Hướng dẫn cho bài: Authentication trong Ruby on Rails 5 - Phần Đăng Nhập
+# | Thực hiện bởi: Trần Đức Lợi (loitranduc@gmail.com)
+# | Tại: Playlist Youtube "Học lập trình Ruby căn bản"
+# | Tham gia nhóm "Cùng nhau học lập trình" trên facebook: 
+# | https://www.facebook.com/groups/hoclaptrinhleotran/
+# -----------------------------------------------------------------------------------------
+
+. Test thử việc authen từ console
+	- rails console
+	- User.create(name: "Leo Tran", email: "loitd@example.com",password: "xxxxxx", password_confirmation: "xxxxxx")
+	- user = User.find_by(email: "loitd@example.com")
+	- Xem chuỗi mã hóa pw: user.password_digest
+	- Thử authen: user.authenticate("xxx")
+. Thực hiện trang login/đăng nhập
+	- Tạo sessions controller def 3 phương thức: new, create và destroy
+		- new cho get login, create cho post login và destroy cho logout
+		- rails g controller Sessions new
+	- Chỉnh sửa routes cho phù hợp và kiểm tra routes với câu lệnh "rails routes"
+	- Chỉnh sửa view làm một form đăng nhập
+		- Làm theo mẫu của bootstrap
+		- Phần thông báo message lỗi không dùng lại như của users mà được thay bằng flash
+		- Lưu ý về cách sử dụng flash cho nhiều class trong nội dung
+		- Thêm phần sticky footer vào trong main template
+	- Thêm phương thức create và destroy vào sessions_controller
+		- Tạo flash và truyền vào trong view
+		- Test flash trong trường hợp login đúng
+		- thêm helper (đăng ký trong controller + define trong helper) để login user
+		- redirect về trang user nếu thành công
+	- Kiểm tra tính hợp lệ khi truy cập vào các trang cần đăng nhập
+		- Thêm phần kiểm tra user hiện thời trong helper với toán tử ||=
+		- Thêm phần kiểm tra đã login chưa?
+		- Thay đổi view nav cho phù hợp nếu đã login
+	- Thêm phần logout
+		- Thêm logout vào helper
+		- Chỉnh sửa destroy controller
+		- Chỉnh sửa lại link logout
+

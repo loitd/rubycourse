@@ -1,0 +1,12 @@
+. giới thiệu devise
+	. https://github.com/plataformatec/devise
+	. công dụng của devise
+	. các gem tương tự devise
+		. http://github.com/thoughtbot/clearance
+		. http://github.com/binarylogic/authlogic
+		. http://railscasts.com/episodes/192-authorization-with-cancan
+	. tại sao cần devise?
+. install devise
+	. 
+. setup user model
+. chỉnh sửa layout cho hợp lý

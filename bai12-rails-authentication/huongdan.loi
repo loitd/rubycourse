@@ -1,0 +1,28 @@
+# -----------------------------------------------------------------------------------------
+# | Hướng dẫn cho bài: Authentication trong Ruby on Rails 5 (Phần Đăng Ký)
+# | Thực hiện bởi: Trần Đức Lợi (loitranduc@gmail.com)
+# | Tại: Playlist Youtube "Học lập trình Ruby căn bản"
+# | Tham gia nhóm "Học lập trình cùng Trần Đức Lợi" trên facebook: 
+# | https://www.facebook.com/groups/hoclaptrinhleotran/
+# -----------------------------------------------------------------------------------------
+
+. Validate email format cho form đã tạo (Tại đâu?)
+	- sử dụng format & regex
+	- a@a.com
+	- VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
+	- Giải thích regex
+		- [\w+\-.]+		=> ít nhất 1 ký tự chữ, dấu ghạch, dấu chấm
+		- + 			=> thêm nhiều nữa cũng ok
+		- [a-z\d\-.] 	=> các ký tự từ a-z và các ký tự số, dấu ghạch, dấu chấm
+		- \. 			=> ký tự chấm
+		- /i			=> không phân biệt hoa thường
+		- \A 			=> bắt đầu chuỗi
+		- \z 			=> kết thúc chuỗi
+	- http://rubular.com/
+. Thêm password có mã hóa vào database và model
+	- gem 'bcrypt',         '3.1.11' sau đó bundle install
+	- rails g migration add_password_digest_to_users password_digest:string
+	- Lưu ý phải có đuôi là _to_users để rails biết thêm vào bảng nào. 
+	- Vào db migration để xem file đã thay đổi sau câu lệnh sau đó rake db:migrate
+	- Thêm has_secure_password vào model -> password confirm
+	- Thêm :password, :password_confirmation vào user_params trong user controller

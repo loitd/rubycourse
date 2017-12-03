@@ -1,0 +1,17 @@
+Ruby on Rails in development mode or production mode?
+
+0. Cách chạy cho từng mode
+- rails s -e development
+- rails s -e production
+- rails s --help #in app folder
+
+1. Các mode được định nghĩa trong silverspoon
+- config/environments
+- Sự khác biệt giữa 2 mode
+
+2. Cấu hình để chạy mode production
+- devise config.secret_key = ''
+- config secrets secret_key_base: 
+- Cài lại bcrypt: gem uninstall bcrypt -> thay cấu hình trong gem: gem 'bcrypt', platforms: :ruby -> bundle update
+- compile lại các tài nguyên css, js và ghi vào thư mục public: bundle exec rake assets:precompile
+- enable public file served trong file production.rb: config.public_file_server.enabled = true
