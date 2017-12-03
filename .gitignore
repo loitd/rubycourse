@@ -10,6 +10,22 @@
 /test/version_tmp/
 /tmp/
 
+# All vids
+*.mp4
+*.mp3
+*.jpg
+*.png
+*.f4v
+*.avi
+*.fbr
+*.wav
+*.wmv
+*.mkv
+*.mpg
+*.mpeg
+*.gif
+
+
 # Used by dotenv library to load environment variables.
 # .env
 
