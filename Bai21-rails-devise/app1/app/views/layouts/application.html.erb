@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>App1</title>
+    <%= csrf_meta_tags %>
+
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+  </head>
+
+  <body>
+    <ul>
+      <li><a href="#">Home</a></li>
+      <li><a href="#">Posts</a></li>
+      <% if user_signed_in? %>
+        <li>Signed in as <%= current_user.email %></li>  
+      <% else %>
+        <li><a href="#">Login | <%= ENV['SSL_CERT_FILE']%></a></li>
+      <% end %>
+    </ul>
+    <%= yield %>
+    <p class="notice"><%= notice %></p>
+    <p class="alert"><%= alert %></p>
+  </body>
+</html>

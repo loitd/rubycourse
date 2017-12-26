@@ -1,0 +1,13 @@
+# -----------------------------------------------------------------------------------------
+# | Hướng dẫn cho bài: Routes và đi đến 1 đường dẫn bất kỳ trong Ruby on Rails 5
+# | Thực hiện bởi: Trần Đức Lợi (loitranduc@gmail.com)
+# | Youtube channel: https://youtube.com/c/tranducloi
+# | Tại: Playlist Youtube "Học lập trình Ruby Season 2"
+# | Tham gia nhóm "Học lập trình cùng Trần Đức Lợi" trên facebook: 
+# | https://www.facebook.com/groups/hoclaptrinhleotran/
+# -----------------------------------------------------------------------------------------
+
+- url_for(:controller => :controller_name, :action => :action_name, :param1 => :val1, :param2 => :val2) ---> will results in /contorller_name/action_name?param1=val1&param2=val2
+
+Tham khảo:
+http://api.rubyonrails.org/v5.1/classes/ActionDispatch/Routing/UrlFor.html

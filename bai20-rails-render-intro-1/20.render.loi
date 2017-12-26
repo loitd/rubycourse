@@ -1,0 +1,211 @@
+# -----------------------------------------------------------------------------------------
+# | Hướng dẫn cho bài: Render và Layouts trong Ruby on Rails 5
+# | Thực hiện bởi: Trần Đức Lợi (loitranduc@gmail.com)
+# | Youtube channel: https://youtube.com/c/tranducloi
+# | Tại: Playlist Youtube "Học lập trình Ruby Season 2"
+# | Tham gia nhóm "Học lập trình cùng Trần Đức Lợi" trên facebook: 
+# | https://www.facebook.com/groups/hoclaptrinhleotran/
+# -----------------------------------------------------------------------------------------
+
+1. 3 cách để tạo HTTP response trong rails
+- gọi hàm render để trả về kết quả đầy đủ cho browser
+- gọi hàm redirect_to để chuyển hướng sang link khác
+- gọi hàm head trả về kết quả chỉ gồm header cho browser
+- việc trả về http response thường được thực hiện trong controller
+
+2. Ôn lại 3 câu lệnh rails generate 
+- rails g model ModelName Column:datatype
+---> model + migration
+- rails g resource ResourceName Column:datatype
+---> model + migration + resource route + một controller trống
+- rails g scaffold ResourceName Column:datatype
+---> model + migration + resource route + controller đủ (7 public, 2 private) + 7 view files
+- Lưu ý khi cài đặt Active Admin sẽ sử dụng InheritedResources thay vì in đủ 9 method trong controller
+---> cần thêm tham số -c=scaffold_controller để chỉ định rails sinh như mặc định
+
+3. cách trả về bằng resources trong route
+- tạo scaffold post
+---> rails generate scaffold post title:string body:text published:boolean
+---> rails generate scaffold post2 title:string body:text published:boolean -c=scaffold_controller
+---> rails db:migrate RAILS_ENV=development (nếu cần)
+---> http://localhost:3000/post2s/1.json vs http://localhost:3000/post2s/1
+
+4. sử dụng hàm render để tùy chỉnh trả về
+render plain: "Ok con dê"
+head :bad_request
+render html: "<b>Oh</b> yeah".html_safe 
+render json: @product
+render :edit
+render action: :edit
+render "edit"
+render "edit.html.erb"
+render action: "edit"
+render action: "edit.html.erb"
+render "books/edit"
+render "books/edit.html.erb"
+render template: "books/edit"
+render template: "books/edit.html.erb"
+render "/path/to/rails/app/views/books/edit"
+render "/path/to/rails/app/views/books/edit.html.erb"
+render file: "/path/to/rails/app/views/books/edit"
+render file: "/path/to/rails/app/views/books/edit.html.erb"
+
+5. các tùy chỉnh thêm với render
+- ,content_type: MIME type, "application/rss"
+- ,layout: chọn 1 layout riêng hoặc đặt bằng false để không xác định
+- ,location: HTTP Location header
+- ,status: 200, :ok, 400, :bad_request, 403, :forbidden
+- ,format: :xml, :json, :html mặc định là :html
+
+6. layouts trong rails 5
+- các cách chỉ định layout
+	- trong controller
+	- trong method
+	- theo kế thừa (không chỉ định)
+	- không sử dụng (false)
+- thứ tự tìm kiếm layout để dùng
+	1. app/views/layouts/ControllerNameS.html.erb
+	2. app/views/layouts/ControllerNameS.jbuilder
+	3. app/views/layouts/application.html.erb
+	4. app/views/layouts/application.jbuilder
+- mặc định spoon chỉ tạo application.html.erb 
+=> thử tạo post2s.html.erb trong layouts sẽ thấy trong console: Rendering post2s/edit.html.erb within layouts/post2s
+=> thử xóa hết hoặc đổi tên layouts sẽ thấy trong console: Rendering post2s/edit.html.erb
+
+7. chỉ định layout cho 1 controller
+- layout "Tên_File_Layout"
+
+8. chọn layout dựa trên điều kiện
+- chỉ thực hiện chọn layout khi có request đến
+- chỉ định layout dựa trên điều kiện
+layout :chooselayout
+private
+	def chooselayout
+		# check for nil objects
+		if !@post2.nil? && @post2.id === 1  
+			"application"
+		else
+			"blick"
+		end
+	end
+
+9. chọn layout cho 1 số action nhất định
+- layout "product", except: [:index, :rss]
+- layout "product", only: [:index, :rss]
+
+10. tính kế thừa trong layout
+- trong layout cũng có khái niệm kế thừa thông qua controllers
+- có thể chỉ định layout đến từng method thông qua tùy chọn layout của render
+- ApplicationController khai báo layout "brick"
+- Post2sController < ApplicationController sẽ dùng layout "brick" theo kế thừa nếu không đc chỉ định
+
+11. kế thừa trong template/partial
+- tương tự như trong layout
+- ApplicationController < ActionController
+- Post2sController < ApplicationController
+- LoitdController < Post2sController
+- thêm route tới LoitdController#index
+- không thêm file views (template/partial)
+
+---> thứ tự lookup của template/partial LoitdController#index (file index.html.erb) là:
+	. /app/views/loitd/index
+	. /app/views/post2s/index
+	. /app/views/application/index
+
+ta sẽ thấy view được fallbacks về post2s#index
+
+12. lỗi "Can only render or redirect once per action"
+- lỗi đa phần các lập trình viên đều mắc phải
+
+  if @book.special?
+    render action: "special_show"
+  end
+  render action: "regular_show"
+
+---> sau khi render xong special_show sẽ tiếp tục thực thi render regular_show -> lỗi như trên
+---> render action: "special_show" and return
+
+13. redirect_to và redirect_back
+- redirect_to :edit
+- redirect_back(fallback_location: :root)
+- giao tiếp với browser
+	. trả lại browser thông tin yêu cầu browser request đến 1 đường dẫn khác
+	. sau khi trả lại response cho browser thì các câu lệnh sau nó vẫn đc thực thi
+
+16. phân tích cụ thể phần layouts
+- các bước để render ra 1 giao diện trả về
+	. tìm ra layout (phần này đã nói ở trên)
+	. sử dụng 3 phần để gộp thành response hoàn chỉnh: 
+		. asset tags
+		. yield và content_for
+		. partials
+- asset tags helper
+- không có tác dụng verify sự tồn tại của assets -> chỉ gen links
+	. auto_discovery_link_tag
+	---> link to rss & atom feeds
+	---> <%= auto_discovery_link_tag(:rss, {action: "index"}) %>
+	---> <link rel="alternate" type="application/rss+xml" title="RSS" href="http://localhost:3000/post2s">
+
+	. javascript_include_tag
+	---> <%= javascript_include_tag "main" %>
+	---> <%= javascript_include_tag "main", "columns" %>
+	---> <%= javascript_include_tag "main", "/photos/columns" %>
+	---> <%= javascript_include_tag "http://example.com/main.js" %>
+	. stylesheet_link_tag
+	---> A stylesheet file can be stored in one of three locations: 
+		. app/assets
+		. lib/assets
+		. vendor/assets
+	---> <%= stylesheet_link_tag "main" %>
+	. image_tag
+	---> <%= image_tag "header.jpg" %>
+	. video_tag
+	---> <%= video_tag "abc.mp4" %>
+	. audio_tag
+	---> <%= image_tag "abc.mp3" %>
+	. các thuộc tính thêm
+		. alt: ""
+		. id: ""
+		. class: ""
+
+- tìm hiểu yield
+---> trong 1 layout, yield để xác định vùng mà nội dung của file sẽ được insert vào.
+---> ví dụ trong file blick.html.erb ---> <%= yield %>
+---> đặt tên cho yield: <%= yield :loitd_header %>
+
+<html>
+  <head>
+  <%= yield :loitd_header %>
+  </head>
+  <body>
+  <%= yield %>
+  </body>
+</html>
+
+- content_for
+---> là phần nội dung để được "yield" vào file layout nhưng các yield này cần được đặt tên cụ thể.
+---> nội dung chính của file view sẽ được chuyển vào yield
+---> nội dung trong file view được chỉ định content_for X sẽ được chuyển vào yield tên là X
+---> nội dung file view:
+
+<% content_for :loitd_header do %>
+  <title>A simple page</title>
+<% end %>
+ 
+<p>Hello, Rails!</p>
+
+---> phần content_for :loitd_header sẽ được đẩy vào yield có tên tương ứng, phần còn lại đẩy vào yield.
+
+- partials
+---> mục đích giống như yield: chia nhỏ các template để dễ quản lý
+---> để render 1 phần của layout ta sử dụng cú pháp render đặt trong file layout
+<%= render "vidu/loitd" %>
+khi này rails sẽ tự đi tìm 1 file tên là app/views/vidu/_loitd.html.erb để đi render.
+
+- chỉ định layout cho partial
+<%= render partial: "loitd", layout: "power" %>
+Khi này rails sẽ sử dụng partial: _loitd.html.erb với layout _power.html.erb
+---> lưu ý: khi sử dụng layout cho partial thì phải có từ khóa partial: khai báo tường minh
+
+end. link tham khảo
+- http://guides.rubyonrails.org/layouts_and_rendering.html

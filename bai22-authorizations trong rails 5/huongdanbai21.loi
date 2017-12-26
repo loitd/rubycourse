@@ -1,0 +1,36 @@
+# -----------------------------------------------------------------------------------------
+# | Hướng dẫn cho bài: Authorization trong Ruby on Rails 5 với CanCan
+# | Thực hiện bởi: Trần Đức Lợi (loitranduc@gmail.com)
+# | Youtube channel: https://youtube.com/c/tranducloi
+# | Tại: Playlist Youtube "Học lập trình Ruby Season 2"
+# | Tham gia nhóm "Cùng nhau học lập trình" trên facebook: 
+# | https://www.facebook.com/groups/hoclaptrinhleotran/
+# -----------------------------------------------------------------------------------------
+
+. authorization vs authentication?
+	- authentication
+	- authorization
+
+. nguyên lý authorization trong cancan
+	- định nghĩa abilities ---> kiểm tra abilities ---> cho phép/không cho phép
+
+. cài đặt
+	- gem 'cancan'
+	- bundle install
+	- định nghĩa các ability: rails g cancan:ability
+	- kiểm tra file được tạo ra trong models/ability.rb
+
+. sửa lỗi "cannot load such file -- bcrypt_ext"
+	. chỉnh route home về home#index
+	. chạy hàm login tại địa chỉ /users/sign_in hoặc đăng ký tại /users/sign_up ---> lỗi
+	. 
+
+. định nghĩa Abilities đơn giản
+
+. định nghĩa abilities bằng hash
+
+. gộp các định nghĩa
+
+. định nghĩa abilities bằng block
+
+. kiểm tra abilities

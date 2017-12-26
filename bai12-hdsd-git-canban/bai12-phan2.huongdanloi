@@ -1,0 +1,37 @@
+Hướng dẫn cho bài: Hướng dẫn sử dụng git căn bản (phần 2)
+Thực hiện bởi: Trần Đức Lợi (loitranduc@gmail.com)
+Youtube channel: https://youtube.com/c/tranducloi
+Tham gia nhóm "Cùng nhau học lập trình" trên facebook để cập nhật và trao đổi: 
+https://www.facebook.com/groups/hoclaptrinhleotran/
+---
+
+. lệnh git diff --cached
+	. git diff --help
+	. git diff --color=always --cached
+	. git diff --color=never --cached
+	. git diff --color --cached --summary
+. lệnh git status
+	. git status --help
+	. git status -v
+. lệnh git log
+	. git log --help
+	. git log -n 100
+	. git log
+	. lệnh git log --stat --summary
+. chuyển branch: 
+	. branch là gì?
+	. tại sao cần branches?
+	. git branch ---> xem danh sách branches
+	. git branch branchname  ---> tạo mới branchename
+	. git branch -d branchname ---> xóa branch sau khi merge để đảm bảo các thay đổi đã có trên branch hiện thời, có kiểm tra đã merge chưa
+	. git branch -D branchname ---> xóa branch force, không kiểm tra merge 
+	. git checkout branchname ---> chuyển qua
+	. git checkout master ---> chuyển lại branch mặc định
+	. tạo branch trên remote: git push origin branchname
+	. xóa remote branch: git push origin --delete loitd
+. merge 2 branch
+	. git merge branchname ---> merge branchname vào master (hiện thời)
+	. git diff
+	. git commit -a
+	. sau khi merge xong có thể xóa branchname cũ
+

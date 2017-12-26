@@ -1,0 +1,218 @@
+Hướng dẫn cho bài: Ruby on rails tutorial 21: Giới thiệu devise
+Thực hiện bởi: Trần Đức Lợi (loitranduc@gmail.com)
+Youtube channel: https://youtube.com/c/tranducloi
+Tham gia nhóm "Cùng nhau học lập trình" trên facebook để cập nhật và trao đổi: 
+https://www.facebook.com/groups/hoclaptrinhleotran/
+---------------------------------------------------------
+. giới thiệu devise
+	. https://github.com/plataformatec/devise
+	. công dụng của devise
+	. các thành phần trong devise
+	. các gem tương tự devise
+		. http://github.com/thoughtbot/clearance
+		. http://github.com/binarylogic/authlogic
+		. https://github.com/omniauth/omniauth
+
+. install devise cho 1 project mới
+	. tạo 1 ứng dụng ban đầu với rails
+		. rails new app1 
+		. rails generate scaffold post title:string body:text published:boolean
+	. thêm gem devise vào file gem & bundle install
+	. chạy generator cho devise
+		. rails generate devise:install
+	. thêm các khuyến nghị của devise nếu chưa có:
+		. config.action_mailer.default_url_options = { host: 'localhost', port: 3000 } trong config/environments/development.rb
+		. root to: "posts#index" chỉnh root route về 1 action nào đó
+		. 	<p class="notice"><%= notice %></p>
+       		<p class="alert"><%= alert %></p>
+       		-> thêm các phần để flash lỗi trên application.html.erb
+       	. copy devise views vào app để dễ tối ưu
+       		. rails g devise:views
+       	. tạo model USER
+       		. rails g devise USER
+       	. check lại thông tin migrate của database trong thư mục /db/migrate/....
+       		. rails db:migrate
+    . chạy và thử truy cập vào /posts
+
+. thử dùng các chức năng của devise
+	. liệt kê các đường dẫn đang có trong app
+		. rake routes
+	. /users/sign_up
+	. sửa lỗi "cannot load such file -- bcrypt_ext"
+		. gem uninstall bcrypt bcrypt-ruby
+		. gem install bcrypt --platform=ruby
+		. thêm vào gem file: gem 'bcrypt', platforms: :ruby
+	. /users/sign_in
+
+. tìm hiểu một số helpers và filters của Devise
+	. :authenticate_user!
+		. thêm helper vào controller ---> before_action :authenticate_user!
+		. thử truy cập lại vào /posts ---> đẩy ra login
+		. thử đăng ký và truy cập lại
+	. user_signed_in?
+	. current_user ---> trả về 1 user model instance
+	. user_session
+	. lưu ý theo tên model ---> modelname_signed_in?
+		. devise model: Member ---> member_signed_in?, authenticate_member!
+		. devise model: User   ---> user_signed_in?
+	. sử dụng chỉnh layout application.html.erb
+		<% if user_signed_in? %>
+	        You are signed in as <%= current_user.email %> | <%= link_to "Sign out", destroy_user_session_path %>
+	      <% else %>
+	        You are not signed in
+	      <% end %>
+	. giải thích một số cú pháp
+
+. strong parameters
+	. khi thay đổi views -> thêm trường -> cần chỉnh lại devise
+	. có 3 action trong devise cho phép truyền tham số tới model ---> cần sanitize ---> các strong parameters
+	. các tham số cho phép được truyền vào:
+		. sign_in ---> email (authentication key)
+		. sign_up ---> email, password, password_confirmation
+		. account_update ---> email, password, password_confirmation, current_password
+	. muốn thêm trường username cho user signup?
+		. cách 1: thêm vào ApplicationController 
+		before_action :config_permit_params, if: :devise_controller?
+
+		protected
+		def config_permit_params
+	        devise_parameter_sanitizer.permit(:sign_up, keys: [:username])
+		end
+
+. cho phép user đăng nhập bằng username với devise
+	. tạo migration thêm column username
+		. rails generate migration add_username_to_users username:string:uniq
+		. rake db:migrate
+	
+	. sửa ApplicationController thêm username vào strong parameters
+		. before_action :configure_permitted_parameters, if: :devise_controller?
+		. 
+		def configure_permitted_parameters
+		    added_attrs = [:username, :email, :password, :password_confirmation, :remember_me]
+		    devise_parameter_sanitizer.permit :sign_up, keys: added_attrs
+		    devise_parameter_sanitizer.permit :account_update, keys: added_attrs
+		end
+	
+	. tạo một thuộc tính ảo: login trong User model
+		. attr_accessor :login
+		. thuộc tính ảo này sẽ cho phép login bằng username hoặc email đều được
+		. khai báo authentication_key trong model
+			devise :database_authenticatable, :registerable,
+	         :recoverable, :rememberable, :trackable, 
+	         :validatable, :authentication_keys => [:login]
+	
+	. override method find_for_database_authentication của devise
+		. thêm code vào user model
+			def self.find_for_database_authentication(warden_conditions)
+		      conditions = warden_conditions.dup
+		      if login = conditions.delete(:login)
+		        where(conditions.to_h).where(["lower(username) = :value OR lower(email) = :value", { :value => login.downcase }]).first
+		      elsif conditions.has_key?(:username) || conditions.has_key?(:email)
+		        where(conditions.to_h).first
+		      end
+		    end
+		---> lưu ý perf: việc sử dụng các hàm lower có thể gây mất index
+		. thêm validate cho username trong user model
+			validates :username,
+			  :presence => true,
+			  :uniqueness => {
+			    :case_sensitive => false
+			}
+		. lưu ý bảo mật
+			. nếu 1 người dùng có email: loitd@abc.com và 1 người dùng khác đặt tên là loitd@abc.com --> login lấy bản ghi nào?
+			---> phải thêm validate cho username không được có dạng email
+			---> hoặc check trường email có giá trị của username được truyền vào k nếu có thì k cho đăng ký
+	. cập nhật views thêm trường username/login
+		. rails g devise:views
+		. sửa file devise/sessions/new.html.erb (login)
+			. thay - bằng +
+				-  <p><%= f.label :email %><br />
+			  	-  <%= f.email_field :email %></p>
+			  	+  <p><%= f.label :login %><br />
+			  	+  <%= f.text_field :login %></p>
+		. sửa file đăng ký (registrations/new) và sửa thông tin acc (registrations/edit)
+			.
+				+  <p><%= f.label :username %><br />
+				+  <%= f.text_field :username %></p>
+				   <p><%= f.label :email %><br />
+				   <%= f.email_field :email %></p>
+
+	. test lại
+		. chỉnh lại strong parameters
+			. added_attrs = [:email, :password, :password_confirmation, :remember_me]
+			. ---> lỗi username can not be blank ---> username không được truyền đến db
+
+. thêm dotenv gem vào ruby on rails
+	. https://github.com/bkeepers/dotenv
+	. gem 'dotenv-rails', require: 'dotenv/rails-now'
+	. bundle install
+	. thêm vào đầu file gem hoặc trước module nào cần sử dụng biến môi trường
+	. tạo file .env trong thư mục root
+	. điền các biến môi trường dạng 
+		. 
+		S3_BUCKET=YOURS3BUCKET
+		SECRET_KEY=YOURSECRETKEYGOESHERE
+
+. thêm recaptcha vào devise
+	. đăng ký recaptcha với google
+		. thêm các biến môi trường vào file .env
+		RECAPTCHA_SITE_KEY  = '6LcPSD4UAAAAAMlGHyPTFzarw7pclKTFrNfWV01E'
+		RECAPTCHA_SECRET_KEY = '6LcPSD4UAAAAACOB4SyEbCnKod1MCItd8JoSdxNs'
+
+	. không sử dụng biến môi trường có thể tạo file config trong init
+		# config/initializers/recaptcha.rb
+		Recaptcha.configure do |config|
+		  config.site_key  = '6Lc6BAAAAAAAAChqRbQZcn_yyyyyyyyyyyyyyyyy'
+		  config.secret_key = '6Lc6BAAAAAAAAKN3DRm6VA_xxxxxxxxxxxxxxxxx'
+		  # Uncomment the following line if you are using a proxy server:
+		  # config.proxy = 'http://myproxy.com.au:8080'
+		end
+
+	. cài đặt recaptcha
+		. https://github.com/ambethia/recaptcha
+		. gem "recaptcha", require: "recaptcha/rails"
+		. bundle install
+	. thêm tag vào login view
+		.
+			<%= flash[:recaptcha_error] %>
+			<%= recaptcha_tags %>
+	. xác thực captcha ở controller
+		. tạo 1 file controller tại app/controllers/registrations_controller.rb với nội dung
+
+		class RegistrationsController < Devise::RegistrationsController
+		  prepend_before_action :check_captcha, only: [:create] # Change this to be any actions you want to protect.
+
+		  private
+		    def check_captcha
+		      unless verify_recaptcha
+		        self.resource = resource_class.new sign_up_params
+		        resource.validate # Look for any other validation errors besides Recaptcha
+		        respond_with_navigational(resource) { render :new }
+		      end 
+		    end
+		end
+
+		. nếu là login tại app/controllers/sessions_controller.rb
+
+		class SessionsController < Devise::SessionsController
+		  prepend_before_action :check_captcha, only: [:create] # Change this to be any actions you want to protect.
+
+		  private
+		    def check_captcha
+		      unless verify_recaptcha
+		        self.resource = resource_class.new sign_in_params
+		        resource.validate # Look for any other validation errors besides Recaptcha
+		        respond_with_navigational(resource) { render :new }
+		      end 
+		    end
+		end
+	. thêm vào routes
+		. devise_for :users, controllers: {sessions: "sessions"}
+	. sửa lỗi SSL connect fail
+		. download cacert.pem tại http://curl.haxx.se/ca/cacert.pem
+		. set biến môi trường set SSL_CERT_FILE=D:\code\RubyCourseSeason2\Bai21-rails-devise\app1\ssl\cacert.pem 
+		. hoặc thêm vào file .env
+
+
+. tham khảo:
+	. https://github.com/plataformatec/devise/wiki/How-To:-Allow-users-to-sign-in-using-their-username-or-email-address
